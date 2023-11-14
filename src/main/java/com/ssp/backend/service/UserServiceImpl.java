@@ -14,6 +14,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -65,13 +67,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findByUsername(String userName) {
-        UserEntity user = userDAO.findByUserName(userName);
-        if(user == null) {
-            throw new CustomException("User not found", HttpStatus.NOT_FOUND);
-        }
+    public Optional<UserDto> findByUsername(String userName) {
+        Optional<UserEntity> user = Optional.ofNullable(userDAO.findByUserName(userName).orElseThrow(() -> new CustomException("User not found", HttpStatus.NOT_FOUND)));
 
-        return userMapper.toUserDto(user);
+        return Optional.ofNullable(userMapper.toUserDto(user.get()));
     }
 
     @Override
@@ -84,4 +83,18 @@ public class UserServiceImpl implements UserService {
 
         return userEntityPage;
     }
-}
+
+    @Override
+    public String getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = "";
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        return username;
+    }
+
+    }
+

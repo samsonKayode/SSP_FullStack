@@ -6,10 +6,12 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ssp.backend.dto.UserDto;
 import com.ssp.backend.enums.RoleTypes;
+import com.ssp.backend.exception.CustomException;
 import com.ssp.backend.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -73,7 +75,7 @@ public class UserAuthenticationProvider {
 
         DecodedJWT decoded = verifier.verify(token);
 
-        UserDto user = userService.findByUsername(decoded.getSubject());
+        UserDto user = userService.findByUsername(decoded.getSubject()).orElseThrow(()-> new CustomException("Invalid user details", HttpStatus.NOT_FOUND));
 
         return new UsernamePasswordAuthenticationToken(user, null, authorityList);
     }

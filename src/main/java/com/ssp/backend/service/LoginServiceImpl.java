@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -34,13 +35,13 @@ public class LoginServiceImpl implements LoginService{
     public UserDto createAuthenticationToken(JwtRequest jwtRequest) {
 
         authenticate(jwtRequest.getUserName(), jwtRequest.getPassword());
-        UserDto userDetails = userService.findByUsername(jwtRequest.getUserName());
-        final String token = jwtTokenUtil.createToken(userDetails);
+        Optional<UserDto> userDetails = userService.findByUsername(jwtRequest.getUserName());
+        final String token = jwtTokenUtil.createToken(userDetails.get());
 
-        userDetails.setToken(token);
-        log.info("user: "+userDetails.getUserName()+" logged in at - "+ LocalDate.now());
+        userDetails.get().setToken(token);
+        log.info("user: "+userDetails.get().getUserName()+" logged in at - "+ LocalDate.now());
 
-        return userDetails;
+        return userDetails.get();
     }
 
     private void authenticate(String username, String password) {
