@@ -14,13 +14,6 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 public class BeanConfiguration {
 
     @Bean
-    public OpenAPI openAPI(){
-        return new OpenAPI()
-                .components(new Components())
-                .info(apiInfo());
-    }
-
-    @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
@@ -28,12 +21,5 @@ public class BeanConfiguration {
     @Bean
     MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
         return new MvcRequestMatcher.Builder(introspector);
-    }
-
-    private Info apiInfo(){
-        return new Info()
-                .description("Stone Paper Scissors Demo")
-                .title("Stone Paper Scissors")
-                .version("1.0");
     }
 }

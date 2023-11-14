@@ -1,6 +1,6 @@
 package com.ssp.backend.dto;
 
-import com.ssp.StoneScissorsPaper.enums.GameMove;
+import com.ssp.backend.enums.GameMove;
 import jakarta.validation.Valid;
 import lombok.*;
 
