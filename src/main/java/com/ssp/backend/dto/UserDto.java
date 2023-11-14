@@ -23,4 +23,5 @@ public class UserDto {
     private String fullName;
     @NotNull
     private Set<RoleTypes> roles;
+    private String token;
 }

@@ -5,16 +5,18 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ssp.backend.dto.UserDto;
+import com.ssp.backend.enums.RoleTypes;
+import com.ssp.backend.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.util.Base64;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -25,9 +27,11 @@ public class UserAuthenticationProvider {
 
     private final UserService userService;
 
+    private static List<SimpleGrantedAuthority> authorityList = EnumSet.allOf(RoleTypes.class).stream().map(
+            e -> new SimpleGrantedAuthority(e.name())).collect(Collectors.toList());
+
     @PostConstruct
     protected void init() {
-        // this is to avoid having the raw secret key available in the JVM
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
@@ -37,11 +41,10 @@ public class UserAuthenticationProvider {
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.create()
-                .withSubject(user.getLogin())
+                .withSubject(user.getUserName())
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
-                .withClaim("firstName", user.getFirstName())
-                .withClaim("lastName", user.getLastName())
+                .withClaim("fullName", user.getFullName())
                 .sign(algorithm);
     }
 
@@ -54,12 +57,12 @@ public class UserAuthenticationProvider {
         DecodedJWT decoded = verifier.verify(token);
 
         UserDto user = UserDto.builder()
-                .login(decoded.getSubject())
-                .firstName(decoded.getClaim("firstName").asString())
-                .lastName(decoded.getClaim("lastName").asString())
+                .userName(decoded.getSubject())
+                .fullName(decoded.getClaim("fullName").asString())
                 .build();
 
-        return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+        return new UsernamePasswordAuthenticationToken(user, null, authorityList);
+
     }
 
     public Authentication validateTokenStrongly(String token) {
@@ -70,9 +73,9 @@ public class UserAuthenticationProvider {
 
         DecodedJWT decoded = verifier.verify(token);
 
-        UserDto user = userService.findByLogin(decoded.getSubject());
+        UserDto user = userService.findByUsername(decoded.getSubject());
 
-        return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+        return new UsernamePasswordAuthenticationToken(user, null, authorityList);
     }
 
 }
