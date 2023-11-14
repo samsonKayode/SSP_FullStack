@@ -55,7 +55,7 @@ public class LoginServiceImpl implements LoginService{
         }catch (Exception e){
             log.error("internal server error ");
             e.printStackTrace();
-            throw new InternalServerError("Internal server error occured", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new InternalServerError("Internal server error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
