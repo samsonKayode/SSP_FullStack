@@ -12,7 +12,7 @@ public interface UserService {
 
     UserEntity updateUser(UserDto userDTO, Long id);
 
-    Optional<UserDto> findByUsername(String userName);
+    UserDto findByUsername(String userName);
 
     Page<UserEntity> getAllUsers(int pageNo, int pageSize, String sortField, String sortDirection);
 

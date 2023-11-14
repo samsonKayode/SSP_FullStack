@@ -7,6 +7,7 @@ import com.ssp.backend.exception.CustomException;
 import com.ssp.backend.exception.InternalServerError;
 import com.ssp.backend.jwt.UserAuthenticationProvider;
 import com.ssp.backend.mapper.UserMapper;
+import com.ssp.backend.repository.UserDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.Optional;
+import java.nio.CharBuffer;
+import java.time.LocalDateTime;
 
 @Service
 @Slf4j
@@ -28,35 +30,26 @@ public class LoginServiceImpl implements LoginService{
     private final AuthenticationManager authenticationManager;
     private final UserAuthenticationProvider jwtTokenUtil;
     private final UserService userService;
-    private UserMapper userMapper;
+
+    private final UserMapper userMapper;
+    private final UserDao userDao;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
     public UserDto createAuthenticationToken(JwtRequest jwtRequest) {
 
-        authenticate(jwtRequest.getUserName(), jwtRequest.getPassword());
-        Optional<UserDto> userDetails = userService.findByUsername(jwtRequest.getUserName());
-        final String token = jwtTokenUtil.createToken(userDetails.get());
-
-        userDetails.get().setToken(token);
-        log.info("user: "+userDetails.get().getUserName()+" logged in at - "+ LocalDate.now());
-
-        return userDetails.get();
-    }
-
-    private void authenticate(String username, String password) {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            log.error("user account is disabled ->");
-            throw new CustomException("User account is disabled", HttpStatus.BAD_REQUEST);
-        } catch (BadCredentialsException e) {
-            log.error("invalid credentials provided -->"+username);
-            throw new CustomException("invalid credentials provided", HttpStatus.NOT_FOUND);
-        }catch (Exception e){
-            log.error("internal server error ");
-            e.printStackTrace();
-            throw new InternalServerError("Internal server error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        UserEntity userEntity = userDao.findByUserName(jwtRequest.getUserName()).orElseThrow(() -> new CustomException("You have entered invalid login credentials", HttpStatus.NOT_FOUND));
+        if (passwordEncoder.matches(CharBuffer.wrap(jwtRequest.getPassword()), userEntity.getPassword())) {
+            UserDto userDetails = userMapper.toUserDto(userEntity);
+            final String token = jwtTokenUtil.createToken(userDetails);
+            userDetails.setToken(token);
+            log.info("user: "+userDetails.getUserName()+" logged in at - "+ LocalDateTime.now());
+            return userDetails;
+        }else{
+            log.error("unauthorized login attempt blocked --> username "+jwtRequest.getUserName());
+            throw new CustomException("You have entered invalid login credentials", HttpStatus.BAD_REQUEST);
         }
+
     }
 }

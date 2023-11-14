@@ -67,10 +67,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserDto> findByUsername(String userName) {
-        Optional<UserEntity> user = Optional.ofNullable(userDAO.findByUserName(userName).orElseThrow(() -> new CustomException("User not found", HttpStatus.NOT_FOUND)));
+    public UserDto findByUsername(String userName) {
+        UserEntity user = userDAO.findByUserName(userName).orElseThrow(() -> new CustomException("User not found", HttpStatus.NOT_FOUND));
 
-        return Optional.ofNullable(userMapper.toUserDto(user.get()));
+        return userMapper.toUserDto(user);
     }
 
     @Override

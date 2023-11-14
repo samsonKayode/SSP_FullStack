@@ -19,8 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.Optional;
+import java.time.LocalDateTime;
 import java.util.Random;
 
 @Service
@@ -38,9 +37,9 @@ public class GamePlayServiceImpl implements GamePlayService {
     @Override
     public GamePlayEntity saveGamePlay(GamePlayDto gamePlayDto) {
         GamePlayEntity gamePlayEntity = gamePlayMapper.toGamePlayEntity(gamePlayDto);
-        Optional<UserDto> userDto = userService.findByUsername(userService.getCurrentUser());
-        gamePlayEntity.setUserEntity(userMapper.toUserEntity(userDto.get()));
-        gamePlayEntity.setDate(LocalDate.now());
+        UserDto userDto = userService.findByUsername(userService.getCurrentUser());
+        gamePlayEntity.setUserEntity(userMapper.toUserEntity(userDto));
+        gamePlayEntity.setDate(LocalDateTime.now());
         String computerMove = getComputerMove();
         gamePlayEntity.setComputerMove(GameMove.valueOf(computerMove));
 
@@ -62,9 +61,9 @@ public class GamePlayServiceImpl implements GamePlayService {
                 : Sort.by(sortField).descending();
         final Pageable pageable = PageRequest.of(pageNo -1, pageSize, sort);
 
-        Optional<UserDto> userDto = userService.findByUsername(userService.getCurrentUser());
+        UserDto userDto = userService.findByUsername(userService.getCurrentUser());
 
-        UserEntity userEntity = userMapper.toUserEntity(userDto.get());
+        UserEntity userEntity = userMapper.toUserEntity(userDto);
 
         return gamePlayDao.findByUserEntityOrderByDateDesc(pageable, userEntity).orElseThrow(()-> new CustomException("Unable to retrieve requested data", HttpStatus.NOT_FOUND));
     }

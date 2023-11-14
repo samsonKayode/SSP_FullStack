@@ -6,12 +6,14 @@ import com.ssp.backend.enums.RoleTypes;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.annotation.processing.Generated;
+import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-11-14T18:51:22+0100",
+    date = "2023-11-14T20:43:28+0100",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.9 (Azul Systems, Inc.)"
 )
+@Component
 public class UserMapperImpl implements UserMapper {
 
     @Override
@@ -22,8 +24,8 @@ public class UserMapperImpl implements UserMapper {
 
         UserDto.UserDtoBuilder userDto = UserDto.builder();
 
+        userDto.date( user.getDate() );
         userDto.userName( user.getUserName() );
-        userDto.password( user.getPassword() );
         userDto.fullName( user.getFullName() );
         Set<RoleTypes> set = user.getRoles();
         if ( set != null ) {
@@ -41,6 +43,7 @@ public class UserMapperImpl implements UserMapper {
 
         UserEntity userEntity = new UserEntity();
 
+        userEntity.setDate( userDto.getDate() );
         userEntity.setUserName( userDto.getUserName() );
         userEntity.setPassword( userDto.getPassword() );
         userEntity.setFullName( userDto.getFullName() );

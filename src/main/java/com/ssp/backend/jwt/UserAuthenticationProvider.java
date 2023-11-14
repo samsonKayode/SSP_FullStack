@@ -75,7 +75,7 @@ public class UserAuthenticationProvider {
 
         DecodedJWT decoded = verifier.verify(token);
 
-        UserDto user = userService.findByUsername(decoded.getSubject()).orElseThrow(()-> new CustomException("Invalid user details", HttpStatus.NOT_FOUND));
+        UserDto user = userService.findByUsername(decoded.getSubject());
 
         return new UsernamePasswordAuthenticationToken(user, null, authorityList);
     }
