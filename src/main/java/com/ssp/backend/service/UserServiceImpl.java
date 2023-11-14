@@ -3,6 +3,7 @@ package com.ssp.backend.service;
 import com.ssp.backend.dto.UserDto;
 import com.ssp.backend.entity.UserEntity;
 import com.ssp.backend.enums.RoleTypes;
+import com.ssp.backend.exception.CustomException;
 import com.ssp.backend.mapper.UserMapper;
 import com.ssp.backend.repository.UserDao;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
         if(userDAO.existsByUserName(userEntity.getUserName())) {
             log.error("duplicate user");
-            throw new DuplicateUserException();
+            throw new CustomException("Username already taken", HttpStatus.BAD_REQUEST);
         }
 
         if(userEntity.getRoles().isEmpty() || userEntity.getRoles() == null) {
@@ -53,18 +55,23 @@ public class UserServiceImpl implements UserService {
 
         if(!oldEntity.isPresent()) {
             log.error("Invalid user id provided");
-            throw new InvalidDataSubmittedException();
+            throw new CustomException("Invalid id provided", HttpStatus.NOT_FOUND);
         }
 
         UserEntity userEntity = userMapper.toUserEntity(userDTO);
-        userEntity.setId(findByUsername(userDTO.getUserName()).getId());
+        userEntity.setId(id);
 
         return userDAO.save(userEntity);
     }
 
     @Override
     public UserDto findByUsername(String userName) {
-        return userMapper.toUserDto(userDAO.findByUserName(userName));
+        UserEntity user = userDAO.findByUserName(userName);
+        if(user == null) {
+            throw new CustomException("User not found", HttpStatus.NOT_FOUND);
+        }
+
+        return userMapper.toUserDto(user);
     }
 
     @Override
@@ -72,9 +79,7 @@ public class UserServiceImpl implements UserService {
 
         final Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending()
                 : Sort.by(sortField).descending();
-
         final Pageable pageable = PageRequest.of(pageNo -1, pageSize, sort);
-
         final Page<UserEntity> userEntityPage = userDAO.findAll(pageable);
 
         return userEntityPage;
