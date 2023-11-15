@@ -1,0 +1,27 @@
+<div class="row justify-content-center">
+
+    <div class="card col-6">
+        <div class="card-body">
+
+            <h2 class="card-title mb-4">Login Page </h2>
+            <form (ngSubmit)="onSubmitLogin()" #loginForm="ngForm">
+                <div class="form-outline mb-4">
+                  <label for="username">Username</label>
+                  <input type="login" class="form-control" id="userName" name="userName" [(ngModel)]="userName"
+                    aria-describedby="usernameHelp" />
+                  <small id="usernameHelp" class="form-text text-muted">enter your email, phone number, or username.</small>
+                </div>
+                <div class="form-outline mb-4">
+                  <label for="password">Password</label>
+                  <input type="password" class="form-control" [(ngModel)]="password" id="password" name="password" >
+                </div>
+                <div class="form-outline mb-4 form-check">
+                  <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                  <label class="form-check-label" for="exampleCheck1">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+              </form>
+        </div>
+    </div>
+
+</div>
