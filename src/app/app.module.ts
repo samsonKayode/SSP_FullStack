@@ -8,6 +8,10 @@ import { GamePlayComponent } from './game-play/game-play.component';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { ContentComponent } from './content/content.component';
+import { RegistrationFormComponent } from './registration-form/registration-form.component';
+import { AppRoutingModule } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -16,11 +20,15 @@ import { ContentComponent } from './content/content.component';
     GamePlayComponent,
     WelcomePageComponent,
     LoginFormComponent,
-    ContentComponent
+    ContentComponent,
+    RegistrationFormComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    AppRoutingModule,
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

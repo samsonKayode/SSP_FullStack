@@ -18,8 +18,9 @@ export class ContentComponent {
         userName: input.userName,
         password: input.password
       }
-    )
-
+    ).then(response => {
+      this.axiosService.setAuthToken(response.data.token);
+    });
   }
 
 }
