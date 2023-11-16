@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { AxiosService } from '../axios.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -14,12 +15,28 @@ export class LoginFormComponent {
   userName: string = "";
   password: string = "";
 
-  onSubmitLogin(): void {
-    //this.onSubmitLoginEvent.emit({"userName": this.userName, "password": this.password});
-    this.onLogin({"userName": this.userName, "password": this.password})
+
+
+  loginForm!: FormGroup;
+  submitted = false;
+
+  constructor(private axiosService: AxiosService, private toastr: ToastrService,
+    private router: Router, private formBuilder: FormBuilder) { }
+
+  ngOnInit() {
+    this.loginForm = this.formBuilder.group({
+      userName: ['', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(3)]]
+    })
   }
 
-  constructor(private axiosService : AxiosService, private toastr: ToastrService, private router: Router) {}
+  onSubmitLogin(): void {
+    this.submitted=true;
+    if(this.loginForm.invalid) {
+      return;
+    }
+    this.onLogin({ "userName": this.userName, "password": this.password })
+  }
 
   onLogin(input: any): void {
     this.axiosService.request(

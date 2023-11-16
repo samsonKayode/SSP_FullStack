@@ -6,21 +6,36 @@
         <div class="card-body">
 
             <h2 class="card-header mb-4">Login Page </h2>
-            <form (ngSubmit)="onSubmitLogin()" #loginForm="ngForm">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
                 <div class="form-outline mb-4">
                   <label for="username">Username</label>
                   <input type="login" class="form-control" id="userName" name="userName" [(ngModel)]="userName"
-                    aria-describedby="usernameHelp" />
-                  <small id="usernameHelp" class="form-text text-muted">enter your email, phone number, or username.</small>
+                    aria-describedby="usernameHelp" 
+                    formControlName="userName" [ngClass]="{'is-invalid': submitted && loginForm.controls.userName.errors}"/>
+                  <div *ngIf="submitted && loginForm.controls.userName.errors" class="text-danger">
+                    <div *ngIf="submitted && loginForm.controls.userName.errors.required">
+                        <small id="usernameHelp" class="form-text text-danger">username is required</small>
+                    </div>
                 </div>
+                </div>
+
+
                 <div class="form-outline mb-4">
                   <label for="password">Password</label>
-                  <input type="password" class="form-control" [(ngModel)]="password" id="password" name="password" >
+                  <input type="password" class="form-control" [(ngModel)]="password" id="password" name="password" aria-describedby="passwordError"
+                  formControlName="password" [ngClass]="{'is-invalid': submitted && loginForm.controls.password.errors}">
+                  <div *ngIf="submitted && loginForm.controls.userName.errors" class="text-danger">
+                    <div *ngIf="submitted && loginForm.controls.userName.errors.required">
+                        <small id="passwordError" class="form-text text-danger">password is required</small>
+                    </div>
                 </div>
+                </div>
+
                 <div class="form-outline mb-4 form-check">
                   <input type="checkbox" class="form-check-input" id="exampleCheck1">
                   <label class="form-check-label" for="exampleCheck1">Remember me</label>
                 </div>
+
                 <button type="submit" class="btn btn-primary btn-block">Login</button>
               </form>
         </div>
