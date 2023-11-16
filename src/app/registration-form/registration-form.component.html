@@ -4,27 +4,31 @@
     <div class="card-body">
 
       <h2 class="card-header mb-4">User Registration </h2>
-      <form (ngSubmit)="onSubmitRegister()" #loginForm="ngForm">
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmitRegister()">
         <div class="form-outline mb-4">
           <label for="username">Username</label>
-          <input type="text" class="form-control" id="userName" name="userName" [(ngModel)]="userName"
+          <input formControlName="userName" [ngClass]="{'is-invalid': submitted && registrationForm.controls.userName.errors}" type="text" class="form-control" id="userName" name="userName" [(ngModel)]="userName"
             aria-describedby="usernameHelp" />
         </div>
         <div class="form-outline mb-4">
           <label for="password">Password</label>
-          <input type="password" class="form-control" [(ngModel)]="password" id="password" name="password">
+          <input type="password" class="form-control" [(ngModel)]="password" id="password" name="password" 
+          formControlName="password" [ngClass]="{'is-invalid': submitted && registrationForm.controls.password.errors}">
         </div>
         <div class="form-outline mb-4">
             <label for="email">Email</label>
-            <input type="email" class="form-control" [(ngModel)]="email" id="email" name="email">
+            <input type="email" class="form-control" [(ngModel)]="email" id="email" name="email"
+            formControlName="email" [ngClass]="{'is-invalid': submitted && registrationForm.controls.email.errors}">
           </div>
           <div class="form-outline mb-4">
             <label for="phone">Phone number</label>
-            <input type="number" class="form-control" [(ngModel)]="phone" id="phone" name="phone">
+            <input type="number" class="form-control" [(ngModel)]="phone" id="phone" name="phone" 
+            formControlName="phone" [ngClass]="{'is-invalid': submitted && registrationForm.controls.phone.errors}">
           </div>
         <div class="form-outline mb-4">
           <label for="fullName">Full Name</label>
-          <input type="text" class="form-control" [(ngModel)]="fullName" id="fullName" name="fullName">
+          <input type="text" class="form-control" [(ngModel)]="fullName" id="fullName" name="fullName"
+          formControlName="fullName" [ngClass]="{'is-invalid': submitted && registrationForm.controls.fullName.errors}">
         </div>
         <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
       </form>

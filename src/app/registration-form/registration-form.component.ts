@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { AxiosService } from '../axios.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-registration-form',
@@ -16,10 +17,29 @@ export class RegistrationFormComponent {
   phone!: number;
   fullName: string = "";
 
-  constructor(private axiosService : AxiosService, private toastr: ToastrService, private router: Router) {}
+  registrationForm!: FormGroup;
+  submitted = false;
+
+  constructor(private axiosService : AxiosService, private toastr: ToastrService, 
+    private router: Router, private formBuilder:FormBuilder) {}
+
+    ngOnInit() {
+      this.registrationForm = this.formBuilder.group({
+        userName:['', Validators.required],
+        password:['', Validators.required],
+        fullName:['', Validators.required],
+        email:['', Validators.email],
+        phone:['', Validators.required]
+      })
+    }
 
 
   onSubmitRegister(): void {
+    this.submitted = true;
+    if(this.registrationForm.invalid) {
+      return;
+    }
+
     this.onRegister({"userName": this.userName, "password": this.password
     , "email":this.email, "phone":this.phone, "fullName": this.fullName});
   }
