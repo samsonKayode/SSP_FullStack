@@ -4,7 +4,6 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
@@ -14,8 +13,8 @@ export class LoginFormComponent {
   @Output() onSubmitLoginEvent = new EventEmitter();
   userName: string = "";
   password: string = "";
-
-
+  error_message: string = "";
+  data: string[] = [];
 
   loginForm!: FormGroup;
   submitted = false;
@@ -47,13 +46,18 @@ export class LoginFormComponent {
         password: input.password
       }
     ).then(response => {
+      this.data = response;
+      console.log(this.data);
       this.axiosService.setAuthToken(response.data.token);
+      this.axiosService.setUserData(response.data);
       this.toastr.success("You are logged in");
-      this.router.navigate(["register"]);
+      this.router.navigate(["play"]);
+      this.toastr.success("Welcome "+response.data.fullName);
 
     }).catch(error => {
+      this.error_message = error.response.data.message;
       console.log(error);
-      this.toastr.error("You have provided invalid login credentials");
+      this.toastr.error(this.error_message);
     });
   }
 }

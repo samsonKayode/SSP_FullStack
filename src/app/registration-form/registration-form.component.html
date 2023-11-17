@@ -7,35 +7,78 @@
       <form [formGroup]="registrationForm" (ngSubmit)="onSubmitRegister()">
         <div class="form-outline mb-4">
           <label for="username">Username</label>
-          <input formControlName="userName" [ngClass]="{'is-invalid': submitted && registrationForm.controls.userName.errors}" type="text" class="form-control" id="userName" name="userName" [(ngModel)]="userName"
-            aria-describedby="usernameHelp" />
+          <input formControlName="userName"
+            [ngClass]="{'is-invalid': submitted && registrationForm.controls.userName.errors}" type="text"
+            class="form-control" id="userName" name="userName" [(ngModel)]="userName" aria-describedby="usernameHelp" />
+            <div *ngIf="submitted && registrationForm.controls.userName.errors" class="text-danger">
+              <div *ngIf="submitted && registrationForm.controls.userName.errors.required">
+                <small id="usernameHelp" class="form-text text-danger">username is required</small>
+              </div>
+              <div *ngIf="submitted && registrationForm.controls.userName.errors.minlength">
+                <small id="usernameHelp" class="form-text text-danger">username is invalid</small>
+              </div>
+            </div>
         </div>
+
         <div class="form-outline mb-4">
           <label for="password">Password</label>
-          <input type="password" class="form-control" [(ngModel)]="password" id="password" name="password" 
-          formControlName="password" [ngClass]="{'is-invalid': submitted && registrationForm.controls.password.errors}">
+          <input type="password" class="form-control" [(ngModel)]="password" id="password" name="password"
+            formControlName="password"
+            [ngClass]="{'is-invalid': submitted && registrationForm.controls.password.errors}">
+            <div *ngIf="submitted && registrationForm.controls.password.errors" class="text-danger">
+              <div *ngIf="submitted && registrationForm.controls.password.errors.required">
+                <small class="form-text text-danger">password is required</small>
+              </div>
+              <div *ngIf="submitted && registrationForm.controls.password.errors.minlength">
+                <small class="form-text text-danger">password is invalid</small>
+              </div>
+            </div>
         </div>
+
         <div class="form-outline mb-4">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" [(ngModel)]="email" id="email" name="email"
-            formControlName="email" [ngClass]="{'is-invalid': submitted && registrationForm.controls.email.errors}">
-          </div>
-          <div class="form-outline mb-4">
-            <label for="phone">Phone number</label>
-            <input type="number" class="form-control" [(ngModel)]="phone" id="phone" name="phone" 
-            formControlName="phone" [ngClass]="{'is-invalid': submitted && registrationForm.controls.phone.errors}">
-          </div>
+          <label for="email">Email</label>
+          <input type="email" class="form-control" [(ngModel)]="email" id="email" name="email" formControlName="email"
+            [ngClass]="{'is-invalid': submitted && registrationForm.controls.email.errors}">
+            <div *ngIf="submitted && registrationForm.controls.email.errors" class="text-danger">
+              <div *ngIf="submitted && registrationForm.controls.email.errors.email">
+                <small class="form-text text-danger">email is not valid</small>
+              </div>
+            </div>
+        </div>
+
+        <div class="form-outline mb-4">
+          <label for="phone">Phone number</label>
+          <input type="number" class="form-control" [(ngModel)]="phone" id="phone" name="phone" formControlName="phone"
+            [ngClass]="{'is-invalid': submitted && registrationForm.controls.phone.errors}">
+            <div *ngIf="submitted && registrationForm.controls.phone.errors" class="text-danger">
+              <div *ngIf="submitted && registrationForm.controls.phone.errors.required">
+                <small class="form-text text-danger">phone is required</small>
+              </div>
+            </div>
+        </div>
+
         <div class="form-outline mb-4">
           <label for="fullName">Full Name</label>
           <input type="text" class="form-control" [(ngModel)]="fullName" id="fullName" name="fullName"
-          formControlName="fullName" [ngClass]="{'is-invalid': submitted && registrationForm.controls.fullName.errors}">
+            formControlName="fullName"
+            [ngClass]="{'is-invalid': submitted && registrationForm.controls.fullName.errors}">
+            <div *ngIf="submitted && registrationForm.controls.fullName.errors" class="text-danger">
+              <div *ngIf="submitted && registrationForm.controls.fullName.errors.required">
+                <small class="form-text text-danger">fullname is required</small>
+              </div>
+              <div *ngIf="submitted && registrationForm.controls.fullName.errors.minlength">
+                <small class="form-text text-danger">fullname is invalid</small>
+              </div>
+            </div>
         </div>
+
         <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
       </form>
     </div>
     <div class="card-body">
-        <a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page" class="card-link">Already have an account? Log in here</a>
-      </div>
+      <a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page" class="card-link">Already have an
+        account? Log in here</a>
+    </div>
   </div>
 
 </div>

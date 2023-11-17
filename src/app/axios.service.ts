@@ -22,6 +22,14 @@ export class AxiosService {
        window.localStorage.removeItem("auth_token");
      }
    }
+
+   setUserData(data:any | null) : void {
+     if(data !=null) {
+       window.localStorage.setItem("user_data", data);
+     } else {
+       window.localStorage.removeItem("user_data");
+     }
+   }
     
    request(method: string, url: string, data: any) : Promise<any> {
      let headers = {}
