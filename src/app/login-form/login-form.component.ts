@@ -55,7 +55,12 @@ export class LoginFormComponent {
       this.toastr.success("Welcome "+response.data.fullName);
 
     }).catch(error => {
-      this.error_message = error.response.data.message;
+      if(error.response != null) {
+        this.error_message = error.response.data.message;
+      } else {
+        this.error_message = "The application cannot connect to the server";
+      }
+      
       console.log(error);
       this.toastr.error(this.error_message);
     });
