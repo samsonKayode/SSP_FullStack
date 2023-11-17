@@ -23,19 +23,21 @@ export class AxiosService {
      }
    }
 
-   setUserData(data:any | null) : void {
-     if(data !=null) {
-       window.localStorage.setItem("user_data", data);
+   setUserData(fullName:string, userName: string) : void {
+     if(fullName !=null) {
+       window.localStorage.setItem("fullName", fullName);
+       window.localStorage.setItem("userName", userName);
      } else {
-       window.localStorage.removeItem("user_data");
+       window.localStorage.removeItem("fullName");
+       window.localStorage.removeItem("userName");
      }
    }
     
    request(method: string, url: string, data: any) : Promise<any> {
      let headers = {}
 
-     if(this.getAuthToken() !== null ) {
-       headers = {"Authorization": "Bearer "+this.getAuthToken()};
+     if(this.getAuthToken() != null ) {
+       axios.defaults.headers.common['Authorization'] = "Bearer "+this.getAuthToken();
      }
 
      return axios({
@@ -44,4 +46,5 @@ export class AxiosService {
        data: data
      })
    }
+   
 }

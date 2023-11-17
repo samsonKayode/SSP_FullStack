@@ -49,7 +49,7 @@ export class LoginFormComponent {
       this.data = response;
       console.log(this.data);
       this.axiosService.setAuthToken(response.data.token);
-      this.axiosService.setUserData(response.data);
+      this.axiosService.setUserData(response.data.fullName, response.data.userName);
       this.toastr.success("You are logged in");
       this.router.navigate(["play"]);
       this.toastr.success("Welcome "+response.data.fullName);

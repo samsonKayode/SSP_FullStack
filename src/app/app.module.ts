@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { GamePlayComponent } from './game-play/game-play.component';
-import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { ContentComponent } from './content/content.component';
 import { RegistrationFormComponent } from './registration-form/registration-form.component';
@@ -18,7 +17,6 @@ import { ToastrModule } from 'ngx-toastr';
     AppComponent,
     HeaderComponent,
     GamePlayComponent,
-    WelcomePageComponent,
     LoginFormComponent,
     ContentComponent,
     RegistrationFormComponent
