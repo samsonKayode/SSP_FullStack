@@ -39,7 +39,7 @@ public class LoginServiceImpl implements LoginService{
     @Override
     public UserDto createAuthenticationToken(JwtRequest jwtRequest) {
 
-        UserEntity userEntity = userDao.findByUserName(jwtRequest.getUserName()).orElseThrow(() -> new CustomException("You have entered invalid login credentials", HttpStatus.NOT_FOUND));
+        UserEntity userEntity = userDao.findByUserName(jwtRequest.getUserName()).orElseThrow(() -> new CustomException("invalid login credentials ("+jwtRequest.getUserName()+")", HttpStatus.NOT_FOUND));
         if (passwordEncoder.matches(CharBuffer.wrap(jwtRequest.getPassword()), userEntity.getPassword())) {
             UserDto userDetails = userMapper.toUserDto(userEntity);
             final String token = jwtTokenUtil.createToken(userDetails);
@@ -47,8 +47,7 @@ public class LoginServiceImpl implements LoginService{
             log.info("user: "+userDetails.getUserName()+" logged in at - "+ LocalDateTime.now());
             return userDetails;
         }else{
-            log.error("unauthorized login attempt blocked --> username "+jwtRequest.getUserName());
-            throw new CustomException("You have entered invalid login credentials", HttpStatus.BAD_REQUEST);
+            throw new CustomException("You have entered invalid login credentials ("+jwtRequest.getUserName()+")", HttpStatus.BAD_REQUEST);
         }
 
     }

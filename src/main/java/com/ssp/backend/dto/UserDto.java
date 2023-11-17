@@ -31,6 +31,8 @@ public class UserDto {
     @Size(min = 4)
     @NotBlank
     private String fullName;
+    private String email;
+    private Long phone;
     private Set<RoleTypes> roles;
     private String token;
 }

@@ -38,6 +38,12 @@ public class UserEntity {
     @Column(name = "status", columnDefinition = "boolean default true")
     private boolean enabled;
 
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone")
+    private Long phone;
+
     @Column
     private Set<RoleTypes> roles = new HashSet<>();
 
