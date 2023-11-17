@@ -1,5 +1,6 @@
 package com.ssp.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssp.backend.enums.RoleTypes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

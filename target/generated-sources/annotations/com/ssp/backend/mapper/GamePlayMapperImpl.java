@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-11-14T20:43:28+0100",
+    date = "2023-11-17T04:13:43+0100",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.9 (Azul Systems, Inc.)"
 )
 @Component
@@ -22,7 +22,6 @@ public class GamePlayMapperImpl implements GamePlayMapper {
         GamePlayDto gamePlayDto = new GamePlayDto();
 
         gamePlayDto.setPlayerMove( gamePlayEntity.getPlayerMove() );
-        gamePlayDto.setComputerMove( gamePlayEntity.getComputerMove() );
 
         return gamePlayDto;
     }
@@ -36,7 +35,6 @@ public class GamePlayMapperImpl implements GamePlayMapper {
         GamePlayEntity gamePlayEntity = new GamePlayEntity();
 
         gamePlayEntity.setPlayerMove( gamePlayDto.getPlayerMove() );
-        gamePlayEntity.setComputerMove( gamePlayDto.getComputerMove() );
 
         return gamePlayEntity;
     }

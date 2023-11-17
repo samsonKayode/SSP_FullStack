@@ -88,8 +88,8 @@ public class UserServiceImpl implements UserService {
     public String getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = "";
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails) principal).getUsername();
+        if (principal instanceof UserDto) {
+            username = ((UserDto) principal).getUserName();
         } else {
             username = principal.toString();
         }

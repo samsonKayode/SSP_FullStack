@@ -7,15 +7,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/play")
 @RequiredArgsConstructor
 @Tag(name = "Game Play", description = "GamePlay Controller")
+@CrossOrigin
 public class GamePlayController {
 
     private final GamePlayService gamePlayService;

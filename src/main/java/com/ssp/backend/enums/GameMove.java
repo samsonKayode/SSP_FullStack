@@ -7,9 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum GameMove {
 
-    STONE("stone"),
-    SCISSORS("scissors"),
-    PAPER("paper");
+    STONE("STONE"),
+    SCISSORS("PAPER"),
+    PAPER("SCISSORS");
 
     private String label;
 

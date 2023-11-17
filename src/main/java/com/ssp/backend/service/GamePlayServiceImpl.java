@@ -10,6 +10,7 @@ import com.ssp.backend.exception.CustomException;
 import com.ssp.backend.mapper.GamePlayMapper;
 import com.ssp.backend.mapper.UserMapper;
 import com.ssp.backend.repository.GamePlayDao;
+import com.ssp.backend.repository.UserDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -32,18 +34,19 @@ public class GamePlayServiceImpl implements GamePlayService {
     private final GamePlaySettings gamePlaySettings;
     private final GamePlayMapper gamePlayMapper;
     private final UserMapper userMapper;
+    private final UserDao userDao;
 
 
     @Override
     public GamePlayEntity saveGamePlay(GamePlayDto gamePlayDto) {
         GamePlayEntity gamePlayEntity = gamePlayMapper.toGamePlayEntity(gamePlayDto);
-        UserDto userDto = userService.findByUsername(userService.getCurrentUser());
-        gamePlayEntity.setUserEntity(userMapper.toUserEntity(userDto));
+        Optional<UserEntity> userEntity = userDao.findByUserName(userService.getCurrentUser());
+        gamePlayEntity.setUserEntity(userEntity.get());
         gamePlayEntity.setDate(LocalDateTime.now());
-        String computerMove = getComputerMove();
-        gamePlayEntity.setComputerMove(GameMove.valueOf(computerMove));
+        GameMove computerMove = getComputerMove();
+        gamePlayEntity.setComputerMove(computerMove);
 
-        GamePlayResult result = gamePlaySettings.processGamePlay(gamePlayEntity.getPlayerMove().getLabel(), computerMove);
+        GamePlayResult result = gamePlaySettings.processGamePlay(gamePlayEntity.getPlayerMove(), computerMove);
         gamePlayEntity.setWinner(result);
         log.info("Player ==>"+gamePlayEntity.getUserEntity().getUserName() +" played ==>"+gamePlayEntity.getPlayerMove()+ ". Game Result ===>"+result.getLabel());
 
@@ -68,10 +71,9 @@ public class GamePlayServiceImpl implements GamePlayService {
         return gamePlayDao.findByUserEntityOrderByDateDesc(pageable, userEntity).orElseThrow(()-> new CustomException("Unable to retrieve requested data", HttpStatus.NOT_FOUND));
     }
 
-    private String getComputerMove() {
+    private GameMove getComputerMove() {
         Random random = new Random();
         int randomNumber = random.nextInt(3);
-        String computerMove = GameMove.values()[randomNumber].getLabel();
-        return computerMove;
+        return GameMove.values()[randomNumber];
     }
 }

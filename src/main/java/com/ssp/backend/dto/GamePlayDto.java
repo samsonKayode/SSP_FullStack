@@ -13,6 +13,5 @@ public class GamePlayDto {
 
     @Valid
     private GameMove playerMove;
-    @Valid
-    private GameMove computerMove;
+
 }

@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class GamePlaySettings {
 
-    private boolean isPlayerWin(String playerMove, String computerMove) {
-        return playerMove.equals(GameMove.STONE.getLabel()) && computerMove.equals(GameMove.SCISSORS.getLabel())
-                || (playerMove.equals(GameMove.SCISSORS.getLabel()) && computerMove.equals(GameMove.PAPER.getLabel()))
-                || (playerMove.equals(GameMove.PAPER.getLabel()) && computerMove.equals(GameMove.STONE.getLabel()));
+    private boolean isPlayerWin(GameMove playerMove, GameMove computerMove) {
+        return playerMove.equals(GameMove.STONE) && computerMove.equals(GameMove.SCISSORS)
+                || (playerMove.equals(GameMove.SCISSORS) && computerMove.equals(GameMove.PAPER))
+                || (playerMove.equals(GameMove.PAPER) && computerMove.equals(GameMove.STONE));
     }
 
-    public GamePlayResult processGamePlay(String playerMove, String computerMove) {
+    public GamePlayResult processGamePlay(GameMove playerMove, GameMove computerMove) {
         log.info("Player's Move ===> "+playerMove+" *** Computer move ===> " + computerMove);
 
         if (playerMove.equals(computerMove)) {
