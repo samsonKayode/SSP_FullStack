@@ -40,7 +40,7 @@ public class GamePlayServiceImpl implements GamePlayService {
 
     @Override
     public GamePlayEntity saveGamePlay(GamePlayDto gamePlayDto) {
-        GamePlayEntity gamePlayEntity = new GamePlayEntity();
+        GamePlayEntity gamePlayEntity = GamePlayEntity.builder().build();
         Optional<UserEntity> userEntity = userDao.findByUserName(userService.getCurrentUser());
         gamePlayEntity.setUserEntity(userEntity.get());
         gamePlayEntity.setDate(LocalDateTime.now());

@@ -25,7 +25,7 @@ class UserDaoTest {
     @Autowired
     private UserDao userDao;
     private UserEntity user;
-    private UserMapper userMapper = new UserMapperImpl();
+    private final UserMapper userMapper = new UserMapperImpl();
     @BeforeEach
     public void setup() {
         user = userMapper.toUserEntity(TestData.getTestUser());
