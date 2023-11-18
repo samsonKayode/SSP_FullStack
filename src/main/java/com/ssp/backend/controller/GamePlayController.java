@@ -23,16 +23,13 @@ public class GamePlayController {
 
     @PostMapping
     public ResponseEntity<GamePlayEntity> play(@Valid @RequestBody GamePlayDto gamePlayDto) {
-
         return ResponseEntity.ok(gamePlayService.saveGamePlay(gamePlayDto));
     }
 
     @GetMapping("/history")
     public ResponseEntity<Page<GamePlayEntity>> userPlayHistory(@RequestParam (value = "pageNo", defaultValue = "1")  int pageNo,
                                                                 @RequestParam (value = "pageSize", defaultValue = "10") int pageSize) {
-
         return ResponseEntity.ok(gamePlayService.getUserGameHistory(pageNo, pageSize));
-
     }
 
     @GetMapping("/list")

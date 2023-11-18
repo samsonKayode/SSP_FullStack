@@ -4,19 +4,12 @@ import com.ssp.backend.dto.JwtRequest;
 import com.ssp.backend.dto.UserDto;
 import com.ssp.backend.entity.UserEntity;
 import com.ssp.backend.exception.CustomException;
-import com.ssp.backend.exception.InternalServerError;
 import com.ssp.backend.jwt.UserAuthenticationProvider;
 import com.ssp.backend.mapper.UserMapper;
 import com.ssp.backend.repository.UserDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +20,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @RequiredArgsConstructor
 public class LoginServiceImpl implements LoginService{
-    private final AuthenticationManager authenticationManager;
     private final UserAuthenticationProvider jwtTokenUtil;
-    private final UserService userService;
-
     private final UserMapper userMapper;
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
