@@ -8,8 +8,8 @@ import lombok.Getter;
 public enum GameMove {
 
     STONE("STONE"),
-    SCISSORS("PAPER"),
-    PAPER("SCISSORS");
+    SCISSORS("SCISSORS"),
+    PAPER("PAPER");
 
     private String label;
 

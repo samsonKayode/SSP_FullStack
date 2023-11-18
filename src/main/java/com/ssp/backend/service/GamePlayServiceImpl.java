@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -39,36 +40,42 @@ public class GamePlayServiceImpl implements GamePlayService {
 
     @Override
     public GamePlayEntity saveGamePlay(GamePlayDto gamePlayDto) {
-        GamePlayEntity gamePlayEntity = gamePlayMapper.toGamePlayEntity(gamePlayDto);
+        GamePlayEntity gamePlayEntity = new GamePlayEntity();
         Optional<UserEntity> userEntity = userDao.findByUserName(userService.getCurrentUser());
         gamePlayEntity.setUserEntity(userEntity.get());
         gamePlayEntity.setDate(LocalDateTime.now());
         GameMove computerMove = getComputerMove();
-        gamePlayEntity.setComputerMove(computerMove);
+        gamePlayEntity.setComputerMove(computerMove.getLabel());
+        gamePlayEntity.setPlayerMove(gamePlayDto.getPlayerMove().getLabel());
 
-        GamePlayResult result = gamePlaySettings.processGamePlay(gamePlayEntity.getPlayerMove(), computerMove);
-        gamePlayEntity.setWinner(result);
+        GamePlayResult result = gamePlaySettings.processGamePlay(gamePlayDto.getPlayerMove(), computerMove);
+        gamePlayEntity.setWinner(result.getLabel());
         log.info("Player ==>"+gamePlayEntity.getUserEntity().getUserName() +" played ==>"+gamePlayEntity.getPlayerMove()+ ". Game Result ===>"+result.getLabel());
 
         return gamePlayDao.save(gamePlayEntity);
     }
 
     @Override
-    public Page<GamePlayEntity> getAllGameHistory(int pageNo, int pageSize, String sortField, String sortDirection) {
-        return null;
-    }
+    public Page<GamePlayEntity> getUserGameHistory(int pageNo, int pageSize) {
 
-    @Override
-    public Page<GamePlayEntity> getUserGameHistory(int pageNo, int pageSize, String sortField, String sortDirection) {
+        String sortField ="date";
+        String sortDirection = "desc";
+
         final Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending()
                 : Sort.by(sortField).descending();
         final Pageable pageable = PageRequest.of(pageNo -1, pageSize, sort);
 
-        UserDto userDto = userService.findByUsername(userService.getCurrentUser());
+        Optional<UserEntity> userEntity = userDao.findByUserName(userService.getCurrentUser());
 
-        UserEntity userEntity = userMapper.toUserEntity(userDto);
+        return gamePlayDao.findByUserEntityOrderByDateDesc(pageable, userEntity.get()).orElseThrow(()-> new CustomException("Unable to retrieve requested data", HttpStatus.NOT_FOUND));
+    }
 
-        return gamePlayDao.findByUserEntityOrderByDateDesc(pageable, userEntity).orElseThrow(()-> new CustomException("Unable to retrieve requested data", HttpStatus.NOT_FOUND));
+    @Override
+    public List<GamePlayEntity> getUserGameHistory() {
+
+        Optional<UserEntity> userEntity = userDao.findByUserName(userService.getCurrentUser());
+
+        return gamePlayDao.findByUserEntityOrderByDateDesc(userEntity.get()).orElseThrow(() -> new CustomException("Unable to retrieve requested data", HttpStatus.BAD_REQUEST));
     }
 
     private GameMove getComputerMove() {

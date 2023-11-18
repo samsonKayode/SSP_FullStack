@@ -3,6 +3,8 @@ package com.ssp.backend.mapper;
 import com.ssp.backend.dto.GamePlayDto;
 import com.ssp.backend.entity.GamePlayEntity;
 import javax.annotation.processing.Generated;
+
+import com.ssp.backend.enums.GameMove;
 import org.springframework.stereotype.Component;
 
 @Generated(
@@ -21,7 +23,7 @@ public class GamePlayMapperImpl implements GamePlayMapper {
 
         GamePlayDto gamePlayDto = new GamePlayDto();
 
-        gamePlayDto.setPlayerMove( gamePlayEntity.getPlayerMove() );
+        gamePlayDto.setPlayerMove(GameMove.valueOf(gamePlayEntity.getPlayerMove()));
 
         return gamePlayDto;
     }
@@ -34,7 +36,7 @@ public class GamePlayMapperImpl implements GamePlayMapper {
 
         GamePlayEntity gamePlayEntity = new GamePlayEntity();
 
-        gamePlayEntity.setPlayerMove( gamePlayDto.getPlayerMove() );
+        gamePlayEntity.setPlayerMove( gamePlayDto.getPlayerMove().getLabel() );
 
         return gamePlayEntity;
     }

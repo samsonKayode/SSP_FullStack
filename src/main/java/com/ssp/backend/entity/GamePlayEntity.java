@@ -1,5 +1,6 @@
 package com.ssp.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssp.backend.enums.GameMove;
 import com.ssp.backend.enums.GamePlayResult;
@@ -24,17 +25,18 @@ public class GamePlayEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(name = "date")
     private LocalDateTime date;
 
     @Column(name = "playerMove")
-    private GameMove playerMove;
+    private String playerMove;
 
     @Column(name = "computerMove")
-    private GameMove computerMove;
+    private String computerMove;
 
     @Column(name = "winner")
-    private GamePlayResult winner;
+    private String winner;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
