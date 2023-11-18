@@ -11,25 +11,29 @@ import { Router } from '@angular/router';
 })
 export class GamePlayComponent {
 
-  constructor(private axiosService: AxiosService, private toastr: ToastrService, 
-    private storageService: StorageService, private router:Router) {}
+  constructor(private axiosService: AxiosService, private toastr: ToastrService,
+    private storageService: StorageService, private router: Router) { }
 
   data: string[] = [];
-  //playerMove: string = "";
   fullName: string = this.storageService.getData("fullName");
-  userName: string = this.storageService.getData("userName");
-  error_message: string ="";
+  error_message: string = "";
   game_play_message: string = "Click a button to play!";
-  game_play_status: string ="";
+  game_play_status: string = "";
   playerScore: number = 0;
   computerScore: number = 0;
+
+  ngOnInit() {
+    if (this.axiosService.getAuthToken() == null) {
+      this.router.navigate(['/login']);
+    }
+  }
 
   onPlayGame(event: { target: any; srcElement: any; currentTarget: any; }) {
     var target = event.target || event.srcElement || event.currentTarget;
     var idAttr = target.attributes.id;
     var playerMove = idAttr.nodeValue;
-    console.log("player move is "+playerMove);
-    this.processGamePlay({ "playerMove": playerMove});
+    console.log("player move is " + playerMove);
+    this.processGamePlay({ "playerMove": playerMove });
   }
 
   processGamePlay(input: any): void {
@@ -44,7 +48,7 @@ export class GamePlayComponent {
       this.data = response;
       if (response.data.winner == "WIN") {
         this.playerScore++;
-        this.toastr.success("You ")
+        this.toastr.success("You Won!!!")
       }
 
       if (response.data.winner == "LOSS") {
@@ -53,15 +57,18 @@ export class GamePlayComponent {
       }
 
       this.game_play_status = response.data.winner;
-      this.game_play_message = "Your played-> "+response.data.playerMove+", Computer played-> "+response.data.computerMove;
+      this.game_play_message = "Your played-> " + response.data.playerMove + ", Computer played-> " + response.data.computerMove;
       console.log(response.data);
     }).catch(error => {
-      if(error.response != null) {
+      if (error.response != null) {
         this.error_message = error.response.data.message;
       } else {
         this.error_message = "The application cannot connect to the server";
       }
       console.log(error);
+      if (error.response.status === 401) {
+        this.axiosService.setAuthToken(null);
+      }
       this.toastr.error(this.error_message);
     });
   }

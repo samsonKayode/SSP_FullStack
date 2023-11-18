@@ -8,8 +8,7 @@
         <div class="card-body">
           <h5 class="card-title">Welcome: {{ fullName }}</h5>
           <div class="col-md-12 text-left">
-            <button type="submit" class="btn btn-outline-secondary btn-block" style="margin-right: 10px;">Game Play
-              History</button>
+              <a routerLink="/history" routerLinkActive="active" class="btn btn-outline-secondary btn-block" style="margin-right: 10px;" role="button">Game Play History</a>
             <button type="submit" class="btn btn-outline-secondary btn-block" style="margin-right: 10px;">Edit
               Profile</button>
             <button (click)="logout()" type="submit" class="btn btn-outline-danger btn-block" style="margin-right: 10px;" id="logout_button">Logout</button>
@@ -25,7 +24,7 @@
           <p class="card-text text-center text-info">{{ game_play_message }} </p>
           <div class="text-center">
             <h4>SCORE</h4>
-            <h3>{{ playerScore }} - {{ computerScore }}</h3>
+            <h1>{{ playerScore }} - {{ computerScore }}</h1>
           </div>
         </div>
       </div>

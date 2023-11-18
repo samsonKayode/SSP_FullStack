@@ -1,0 +1,57 @@
+<div class="row justify-content-md-center bg-image" style="background-image: url('https://mdbootstrap.com/img/Photos/Others/images/76.jpg');
+       height: 100vh">
+
+  <div class="container">
+    <div class="col-md-6 offset-3" style="margin-top: 20px;">
+      <div class="card alert alert-primary">
+        <div class="card-body">
+          <h5 class="card-title">Welcome: {{ fullName }}</h5>
+          <div class="col-md-12 text-left">
+            <a routerLink="/play" routerLinkActive="active" class="btn btn-outline-secondary btn-block"
+              style="margin-right: 10px;" role="button">New Game</a>
+            <a routerLink="/play" routerLinkActive="active" class="btn btn-outline-secondary btn-block"
+              style="margin-right: 10px;" role="button">Edit Profile</a>
+            <button (click)="logout()" type="submit" class="btn btn-outline-danger btn-block"
+              style="margin-right: 10px;" id="logout_button">Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8 offset-2 mat-elevation-z8">
+      <div class="card">
+        <div class="card-body">
+
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th> ID</th>
+                <th> Date </th>
+                <th> Player Move </th>
+                <th> Computer Move</th>
+                <th> Result </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let history of userHistory">
+                <td> {{ history.id }} </td>
+                <td> {{ history.date }} </td>
+                <td> {{ history.playerMove }} </td>
+                <td> {{ history.computerMove }} </td>
+                <td> {{ history.winner }} </td>
+              </tr>
+            </tbody>
+          </table>
+          <hr>
+          <ul class="nav justify-content-right nav-pills">
+            <li class="nav-item" *ngFor="let p of pages; let i=index">
+              <a class="nav-link" href="#" (click)="setPage(i,$event)" [ngClass]="{'active': i==page}">{{i}}</a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
