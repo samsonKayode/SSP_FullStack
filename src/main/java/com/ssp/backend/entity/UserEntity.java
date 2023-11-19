@@ -1,5 +1,6 @@
 package com.ssp.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssp.backend.enums.RoleTypes;
 import jakarta.persistence.*;
@@ -22,6 +23,7 @@ public class UserEntity {
     private long id;
 
     @Column(name = "date")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
 
     @Column(name = "username", unique = true)

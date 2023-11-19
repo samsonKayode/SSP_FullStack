@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -46,9 +47,13 @@ public class UserServiceImpl implements UserService {
             userEntity.getRoles().add(RoleTypes.USER);
         }
         userEntity.setPassword(bcryptEncoder.encode(userEntity.getPassword()));
+        userEntity.setDate(LocalDateTime.now());
         userEntity.setEnabled(true);
 
-        return userDAO.save(userEntity);
+        userEntity = userDAO.save(userEntity);
+        log.info("new user created -->" +userEntity.getUserName());
+
+        return userEntity;
     }
 
     @Override
