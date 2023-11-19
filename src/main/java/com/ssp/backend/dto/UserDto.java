@@ -1,5 +1,6 @@
 package com.ssp.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ssp.backend.enums.RoleTypes;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import jakarta.validation.constraints.NotBlank;
@@ -18,6 +19,8 @@ import java.util.Set;
 @Setter
 @Builder
 public class UserDto {
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
     @NotNull(message = "username cannot be empty")
     @Size(min = 3)

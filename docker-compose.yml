@@ -62,15 +62,42 @@ services:
     ports:
       - '9090:9090'
 
-
   Grafana:
     image: grafana/grafana
     container_name: grafana
     ports:
       - '3000:3000'
 
+  mysqldb:
+    image: "mysql:8.0"
+    restart: always
+    ports:
+      - 3307:3306
+    networks:
+      - springapimysql-net
+    environment:
+      MYSQL_DATABASE: ssp
+      MYSQL_USER: hbstudent
+      MYSQL_PASSWORD: hbstudent
+      MYSQL_ROOT_PASSWORD: test
+
+  ssp-backend:
+    depends_on:
+      - mysqldb
+    build: .
+    container_name: ssp-backend
+    ports:
+      - '8080:8080'
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/ssp?allowPublicKeyRetrieval=true
+    networks:
+      - springapimysql-net
+
+
 volumes:
   elastic_data: {}
+  db:
 
 networks:
   elk:
+  springapimysql-net:
