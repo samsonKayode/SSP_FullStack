@@ -50,10 +50,9 @@ public class UserServiceImpl implements UserService {
         userEntity.setDate(LocalDateTime.now());
         userEntity.setEnabled(true);
 
-        userEntity = userDAO.save(userEntity);
         log.info("new user created -->" +userEntity.getUserName());
 
-        return userEntity;
+        return userDAO.save(userEntity);
     }
 
     @Override

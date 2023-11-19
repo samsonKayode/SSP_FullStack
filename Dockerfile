@@ -1,5 +1,5 @@
 ##Build Application Jar file
-FROM eclipse-temurin:17-jdk-alpine AS build
+FROM maven:3.9.5-eclipse-temurin-17-alpine AS build
 RUN mkdir -p /workspace
 WORKDIR /workspace
 COPY pom.xml /workspace

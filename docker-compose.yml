@@ -49,12 +49,6 @@ services:
     networks:
       - elk
 
-  ssp_backend:
-    build: .
-    container_name: ssp_backend
-    ports:
-      - 8080:8080
-
 volumes:
   elastic_data: {}
 
