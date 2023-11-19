@@ -49,6 +49,26 @@ services:
     networks:
       - elk
 
+  Prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: always
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./metrics/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - '9090:9090'
+
+
+  Grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - '3000:3000'
+
 volumes:
   elastic_data: {}
 

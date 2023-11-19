@@ -37,7 +37,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers( "/authenticate", "/register").permitAll()
+                        .requestMatchers( "/authenticate", "/register", "/actuator/prometheus").permitAll()
                         .requestMatchers( "/swagger-ui/**", "/welcome", "/v3/api-docs/**", "/doc-ui/**", "/docs/**").permitAll()
                         .anyRequest().authenticated())
         ;
