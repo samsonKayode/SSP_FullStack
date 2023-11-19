@@ -13,35 +13,37 @@ export class RegistrationFormComponent {
   @Output() onSubmitLoginEvent = new EventEmitter();
   userName: string = "";
   password: string = "";
-  email: string= "";
+  email: string = "";
   phone!: number;
   fullName: string = "";
 
   registrationForm!: FormGroup;
   submitted = false;
 
-  constructor(private axiosService : AxiosService, private toastr: ToastrService, 
-    private router: Router, private formBuilder:FormBuilder) {}
+  constructor(private axiosService: AxiosService, private toastr: ToastrService,
+    private router: Router, private formBuilder: FormBuilder) { }
 
-    ngOnInit() {
-      this.registrationForm = this.formBuilder.group({
-        userName:['', [Validators.required, Validators.minLength(3)]],
-        password:['', [Validators.required, Validators.minLength(3)]],
-        fullName:['', [Validators.required, Validators.minLength(4)]],
-        email:['', Validators.email],
-        phone:['', Validators.required]
-      })
-    }
+  ngOnInit() {
+    this.registrationForm = this.formBuilder.group({
+      userName: ['', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(3)]],
+      fullName: ['', [Validators.required, Validators.minLength(4)]],
+      email: ['', Validators.email],
+      phone: ['', Validators.required]
+    })
+  }
 
 
   onSubmitRegister(): void {
     this.submitted = true;
-    if(this.registrationForm.invalid) {
+    if (this.registrationForm.invalid) {
       return;
     }
 
-    this.onRegister({"userName": this.userName, "password": this.password
-    , "email":this.email, "phone":this.phone, "fullName": this.fullName});
+    this.onRegister({
+      "userName": this.userName, "password": this.password
+      , "email": this.email, "phone": this.phone, "fullName": this.fullName
+    });
   }
 
   onRegister(input: any): void {
@@ -57,7 +59,7 @@ export class RegistrationFormComponent {
       }
     ).then(response => {
       //this.axiosService.setAuthToken(response.data.token);
-      this.toastr.success("Your account has been created "+ this.userName);
+      this.toastr.success("Your account has been created " + this.userName);
       this.router.navigate(["login"]);
 
     }).catch(error => {

@@ -3,6 +3,7 @@ import { AxiosService } from '../axios.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-login-form',
@@ -20,7 +21,7 @@ export class LoginFormComponent {
   submitted = false;
 
   constructor(private axiosService: AxiosService, private toastr: ToastrService,
-    private router: Router, private formBuilder: FormBuilder) { }
+    private router: Router, private formBuilder: FormBuilder, private storageService: StorageService) { }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -30,8 +31,8 @@ export class LoginFormComponent {
   }
 
   onSubmitLogin(): void {
-    this.submitted=true;
-    if(this.loginForm.invalid) {
+    this.submitted = true;
+    if (this.loginForm.invalid) {
       return;
     }
     this.onLogin({ "userName": this.userName, "password": this.password })
@@ -48,19 +49,18 @@ export class LoginFormComponent {
     ).then(response => {
       this.data = response;
       console.log(this.data);
-      this.axiosService.setAuthToken(response.data.token);
-      this.axiosService.setUserData(response.data.fullName, response.data.userName);
+      this.axiosService.setUserData(response.data.fullName, response.data.token);
       this.toastr.success("You are logged in");
       this.router.navigate(["play"]);
-      this.toastr.success("Welcome "+response.data.fullName);
+      this.toastr.success("Welcome " + response.data.fullName);
 
     }).catch(error => {
-      if(error.response != null) {
+      if (error.response != null) {
         this.error_message = error.response.data.message;
       } else {
         this.error_message = "The application cannot connect to the server";
       }
-      
+
       console.log(error);
       this.toastr.error(this.error_message);
     });

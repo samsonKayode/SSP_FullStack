@@ -3,6 +3,7 @@ import { AxiosService } from "../axios.service";
 import { ToastrService } from 'ngx-toastr';
 import { StorageService } from '../storage.service';
 import { Router } from '@angular/router';
+import { VerifyService } from '../verify.service';
 
 @Component({
   selector: 'app-game-play',
@@ -12,7 +13,7 @@ import { Router } from '@angular/router';
 export class GamePlayComponent {
 
   constructor(private axiosService: AxiosService, private toastr: ToastrService,
-    private storageService: StorageService, private router: Router) { }
+    private storageService: StorageService, private router: Router, private verifyService: VerifyService) { }
 
   data: string[] = [];
   fullName: string = this.storageService.getData("fullName");
@@ -23,9 +24,7 @@ export class GamePlayComponent {
   computerScore: number = 0;
 
   ngOnInit() {
-    if (this.axiosService.getAuthToken() == null) {
-      this.router.navigate(['/login']);
-    }
+    this.verifyService.verifyAccess();
   }
 
   onPlayGame(event: { target: any; srcElement: any; currentTarget: any; }) {
@@ -67,7 +66,7 @@ export class GamePlayComponent {
       }
       console.log(error);
       if (error.response.status === 401) {
-        this.axiosService.setAuthToken(null);
+        this.logout();
       }
       this.toastr.error(this.error_message);
     });

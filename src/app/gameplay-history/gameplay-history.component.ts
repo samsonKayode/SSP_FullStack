@@ -2,6 +2,8 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { StorageService } from '../storage.service';
 import { Router } from '@angular/router';
 import { AxiosService } from '../axios.service';
+import { ToastrService } from 'ngx-toastr';
+import { VerifyService } from '../verify.service';
 
 @Component({
   selector: 'app-gameplay-history',
@@ -10,7 +12,8 @@ import { AxiosService } from '../axios.service';
 })
 export class GameplayHistoryComponent implements OnInit {
 
-  constructor(private storageService: StorageService, private router: Router, private axiosService: AxiosService) { }
+  constructor(private storageService: StorageService, private router: Router,
+    private axiosService: AxiosService, private toastr: ToastrService, private verify: VerifyService) { }
 
   data: string[] = [];
   fullName: string = this.storageService.getData("fullName");
@@ -26,10 +29,7 @@ export class GameplayHistoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.axiosService.getAuthToken() == null) {
-      this.router.navigate(['/login']);
-      return;
-    }
+    this.verify.verifyAccess();
     this.getHistory(this.page);
   }
 
@@ -45,9 +45,7 @@ export class GameplayHistoryComponent implements OnInit {
         }).catch(
           (error) => {
             if (error.response.status === 401) {
-              this.axiosService.setAuthToken(null);
-            } else {
-              this.data = error.response.code;
+              this.logout();
             }
           });
   }
