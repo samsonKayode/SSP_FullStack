@@ -1,0 +1,6 @@
+services:
+  ssp-frontend:
+    build: .
+    container_name: ssp-frontend
+    ports:
+      - 80:80

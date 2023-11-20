@@ -14,7 +14,7 @@ export class LoginFormComponent {
   @Output() onSubmitLoginEvent = new EventEmitter();
   userName: string = "";
   password: string = "";
-  error_message: string = "";
+  error_message: string = "The application cannot connect to the server";
   data: string[] = [];
 
   loginForm!: FormGroup;
@@ -57,8 +57,6 @@ export class LoginFormComponent {
     }).catch(error => {
       if (error.response != null) {
         this.error_message = error.response.data.message;
-      } else {
-        this.error_message = "The application cannot connect to the server";
       }
 
       console.log(error);
