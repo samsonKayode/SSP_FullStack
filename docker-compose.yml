@@ -92,6 +92,16 @@ services:
       - spring.datasource.url=jdbc:mysql://mysqldb:3306/ssp?allowPublicKeyRetrieval=true
     networks:
       - springapimysql-net
+      - ssp-game
+
+##This would only work if the front end directory is available in a ../Frontend of the backend folder
+  ssp-frontend:
+    build: ../Frontend
+    container_name: ssp-frontend
+    ports:
+      - 80:80
+    networks:
+      - ssp-game
 
 
 volumes:
@@ -101,3 +111,4 @@ volumes:
 networks:
   elk:
   springapimysql-net:
+  ssp-game:

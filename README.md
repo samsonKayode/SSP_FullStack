@@ -6,9 +6,9 @@ There are two projects in this repo. I made them submodules of this main app, bu
 
 I made them submodules so you can run the app using docker-compose.
 
-Repo for Backend: https://github.com/samsonKayode/SSP_FullStack.git
+Repo for Backend: https://github.com/samsonKayode/SSP_FullStack.git (dev branch)
 
-Repo for Frontend: https://github.com/samsonKayode/url-shortener-ui.git
+Repo for Frontend: https://github.com/samsonKayode/SSP_FullStack.git (frontend branch)
 
 ###Stacks used:
 
@@ -37,17 +37,25 @@ If you want to stop it, use the following command:
 $ docker-compose down
 ```
 
-### How To Access URLS
+### How To Access Backend URLS
 ```
-SSP-Backend-APP : http://localhost:8080/api/v1
-
-Swagger-UI : http://localhost:8080/api/v1/swagger-ui.html
-
-Access Kibana : http://localhost:5601/
-
-Access Grafana : http://localhost:3000
-
-Access Prometheus : http://localhost:9090
+http://localhost:8080/api/v1
+```
+Swagger-UI :
+```
+http://localhost:8080/api/v1/swagger-ui.html
+```
+Access Kibana : 
+```
+http://localhost:5601/
+```
+Access Grafana : 
+```
+http://localhost:3000
+```
+Access Prometheus : 
+```
+http://localhost:9090
 ```
 
 #### Backend (REST API)
@@ -58,6 +66,33 @@ frontend.
 
 Full list of available REST endpoints could be found in Swagger UI,
 which can be accessed via: **http://localhost:8080/api/swagger-ui.html**
+
+## StonePaperScissors App (FrontEnd)
+
+The frontend which consumes the rest api allows you access the user interface of the game.
+
+###Stacks used:
+
+<b><u>Frontend</u></b>
+
+1. Angular 17
+2. Material css
+3. TypeScript
+4. Nginx (deployment)
+
+### How To Access Frontend URLS
+```
+http://localhost:80/login
+```
+
+### How To Run The Frontend Project
+
+To access the Frontend project , it has to be in a directory where the backend directory is also located as show below
+
+
+
+run docker compose from the Backend directory to access the complete application
+
 
 
 
